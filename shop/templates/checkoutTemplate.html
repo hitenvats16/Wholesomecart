@@ -1,0 +1,219 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}" />
+    <title>Checkout Page</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/flowbite@1.4.7/dist/flowbite.min.css"
+    />
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900">
+    <nav class="w-full flex justify-center mt-10">
+      <button
+        onclick="history.back()"
+        type="button"
+        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+      >
+        <div class="flex w-16 justify-between items-center">
+          <span>
+            <svg
+              class="w-6 h-full dark:text-white"
+              fill="white"
+              stroke="white"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
+            </svg>
+          </span>
+          Back
+        </div>
+      </button>
+    </nav>
+    <div class="w-full h-min px-10 py-10 xl:px-20">
+      <h1 class="text-2xl xl:text-4xl text-white font-bold">
+        Step 1: Review!!
+      </h1>
+
+      {% block body %}
+      {% endblock %}
+
+      <h1 class="text-2xl xl:text-4xl text-white font-bold mt-8 mb-4">
+        Step 2: Fill In Details.
+      </h1>
+      <form action='' method="POST" id="frm1">
+        {% csrf_token %}
+        <input hidden value="" name="jsonobject" id="jsonobject">
+        <input hidden value="" name="amount" id="amount">
+        <div class="shadow overflow-hidden rounded-xl">
+          <div class="px-4 py-5 bg-gray-800 sm:p-6">
+            <div class="grid grid-cols-6 gap-6">
+              <div class="col-span-6 sm:col-span-3">
+                <label
+                  for="first-name"
+                  class="block text-sm font-medium text-gray-200"
+                  >First name</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="fname"
+                  id="first-name"
+                  autocomplete="given-name"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+              <div class="col-span-6 sm:col-span-3">
+                <label
+                  for="last-name"
+                  class="block text-sm font-medium text-gray-200"
+                  >Last name</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="lname"
+                  id="last-name"
+                  autocomplete="family-name"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-4">
+                <label
+                  for="email-address"
+                  class="block text-sm font-medium text-gray-200"
+                  >Email address</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="email"
+                  id="email-address"
+                  autocomplete="email"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-3">
+                <label
+                  for="country"
+                  class="block text-sm font-medium text-gray-200"
+                  >Country</label
+                >
+                <select
+                required=""
+                  id="country"
+                  name="country"
+                  autocomplete="country-name"
+                  class="mt-1 block w-full py-2 px-3 border border-gray-600 bg-gray-700 text-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option>India</option>
+                </select>
+              </div>
+
+              <div class="col-span-6">
+                <label
+                  for="street-address"
+                  class="block text-sm font-medium text-gray-200"
+                  >Street address</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="address"
+                  id="street-address"
+                  autocomplete="street-address"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full text-gray-300 shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label
+                  for="city"
+                  class="block text-sm font-medium text-gray-200"
+                  >City</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="city"
+                  id="city"
+                  autocomplete="address-level2"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label
+                  for="region"
+                  class="block text-sm font-medium text-gray-200"
+                  >State / Province</label
+                >
+                <input
+                required=""
+                  type="text"
+                  name="state"
+                  id="region"
+                  autocomplete="address-level1"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label
+                  for="postal-code"
+                  class="block text-sm font-medium text-gray-200"
+                  >ZIP / Postal code</label
+                >
+                <input
+                  required=""
+                  type="text"
+                  name="zip"
+                  id="postal-code"
+                  autocomplete="postal-code"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-300"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="px-4 py-3 bg-gray-800 text-right sm:px-6">
+            <button
+              type="submit"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Place Order
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(()=>{
+        var requestLink = window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/conformation'
+        document.querySelector('#frm1').action = requestLink;
+      })
+    </script>
+
+    {% block script %}
+
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.png' %}" />
+    <title>Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/flowbite@1.4.7/dist/flowbite.min.css"
+    />
+    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+  </head>
+  <body class="bg-gray-900 py-10 xl:py-20 px-5 xl:px-20">
+    <div class="flex w-full h-min items-center justify-center mb-10">
+      <img
+        src="{% static 'logo.png' %}"
+        class="w-36 h-36 rounded-full mr-5 xl:mr-10"
+      />
+      <h1 class="font-bold text-2xl text-white">WholeSomeTracker</h1>
+    </div>
+    <form
+      class="w-full flex-col flex justify-center items-center"
+      action="../tracker"
+      method="post"
+    >
+      {% csrf_token %}
+      <div class="grid gap-6 mb-6 lg:grid-cols-1 w-full">
+        <div class="mb-6">
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >Enter your Tracking Id</label
+          >
+          <input
+            type="text"
+            id="large-input"
+            name="id"
+            class="block p-4 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          />
+        </div>
+        {% if err %}
+        <div role="alert">
+          <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+            Damn!!
+          </div>
+          <div
+            class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"
+          >
+            <p>
+              This Order Id does not associate with any of the order. Try with
+              any other ID. :(
+            </p>
+          </div>
+        </div>
+        {% endif %} {% if stat %}
+        <div>
+          <label class="block mb-2 text-xl font-Bold text-gray-300"
+            >Tracking ID:</label
+          >
+          <div class="w-full p-5 border border-gray-500 rounded-xl">
+            <h1 class="font-regular text-md text-white">
+              {{stat.Tracking_Id}}
+            </h1>
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-xl font-Bold text-gray-300"
+            >Ordered Item(s) :</label
+          >
+          <div class="p-6 space-y-6">
+            <div
+              class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-96"
+            >
+              <table
+                id="cartTable"
+                class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+              >
+                <thead
+                  class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                >
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Product name</th>
+                    <th scope="col" class="px-6 py-3">Quantity</th>
+                    <th scope="col" class="px-6 py-3">Category</th>
+                    <th scope="col" class="px-6 py-3">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- All cart content goes here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-xl font-Bold text-gray-300"
+            >Discription:</label
+          >
+          <div class="w-full p-5 border border-gray-500 rounded-xl">
+            <h1 class="font-regular text-md text-white">
+              {{stat.Discription}}
+            </h1>
+          </div>
+        </div>
+        <div>
+          <label class="block mb-2 text-xl font-Bold text-gray-300"
+            >Status:</label
+          >
+          <div class="w-full p-5 border border-gray-500 rounded-xl">
+            <h1 class="font-regular text-md text-white">{{stat.Status}}</h1>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <button
+        type="submit"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+        Track
+      </button>
+    </form>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(()=>{
+        const items_str = '{{items}}'
+        const items_array = JSON.parse(items_str.replace(/&quot;/g, '"'))
+        const n=items_array.length
+        for(let i=0; i<n; i++){
+          item=items_array[i];
+          addToTable(item.qty,item.name,item.price,item.cat);
+        }
+      })
+
+      const addToTable = (qty,name,price,cat)=>{
+        $("#cartTable")
+            .find("tbody")
+            .append(
+              `<tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600" > <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap" >${name}</th> <td class="px-6 py-4"> <div class="flex justify-start items-center"> ${qty} </div> </td> <td class="px-6 py-4">${cat}</td> <td class="px-6 py-4">${price}</td> </tr>`
+            );
+      }
+    </script>
+  </body>
+</html>

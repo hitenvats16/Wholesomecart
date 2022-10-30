@@ -1,0 +1,12 @@
+decorator
+Django
+ipython-genutils
+Pillow
+pytz
+six
+sqlparse
+waitress
+whitenoise
+wincertstore
+psycopg2-binary
+shell

@@ -1,0 +1,89 @@
+{% extends 'checkoutTemplate.html' %}
+
+{% block body %}
+
+<div class="p-6 space-y-6">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-96">
+      <table
+        id="cartTable"
+        class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+      >
+        <thead
+          class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">Product name</th>
+            <th scope="col" class="px-6 py-3">Quantity</th>
+            <th scope="col" class="px-6 py-3">Category</th>
+            <th scope="col" class="px-6 py-3">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- All cart content goes here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="p-4 text-sm text-gray-700 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-300" role="alert">
+    Your cart total is <span class="font-medium" id="price">₹ 34234</span>. Fill in all details to continue..
+  </div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(()=>{
+        var cart = {};
+
+        if (localStorage.getItem("checkout") !== null) {
+          cart = JSON.parse(localStorage.getItem("checkout"));
+        }
+
+        updateCartModal(cart)
+        
+        $('#jsonobject').val(JSON.stringify(cart))
+        
+        $('.incremental_btn').click((elem)=>{
+          id_str = elem.currentTarget.id.toString().slice(3)
+          var cnt = 0;
+          for(var i=0; i<cart.length; i++){
+            if(cart[i].str==id_str){
+              cart[i].qty = Math.floor(cart[i].qty)+1;
+              document.querySelector(`#qt${id_str}`).innerHTML = cart[i].qty;
+            }
+            cnt+=(Math.floor(cart[i].price.slice(1)))*(Math.floor(cart[i].qty));
+          }
+          document.querySelector('#price').innerHTML=`₹ ${cnt}`;
+          $('#amount').val(cnt)
+          $('#jsonobject').val(JSON.stringify(cart))
+        })
+        $('.decremental_btn').click((elem)=>{
+          id_str = elem.currentTarget.id.toString().slice(3)
+          var cnt = 0;
+          for(var i=0; i<cart.length; i++){
+            if(cart[i].str==id_str && cart[i].qty>1){
+              cart[i].qty = Math.floor(cart[i].qty)-1;
+              document.querySelector(`#qt${id_str}`).innerHTML = cart[i].qty;
+            }
+            cnt+=(Math.floor(cart[i].price.slice(1)))*(Math.floor(cart[i].qty));
+          }
+          document.querySelector('#price').innerHTML=`₹ ${cnt}`;
+          $('#amount').val(cnt)
+          $('#jsonobject').val(JSON.stringify(cart))
+        })
+    });
+
+    const updateCartModal = (cart) => {
+      var cnt=0;
+      cart.forEach((item)=>{
+          const str = item.str
+          const name = item.name
+          let qty = item.qty
+          const cat = item.cat
+          let price = item.price
+          cnt+=(Math.floor(qty))*(Math.floor(price.slice(1)))
+          $('#cartTable').find('tbody').append(`<tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600" > <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap" >${name}</th> <td class="px-6 py-4"> <div class="flex justify-start items-center"> <button id="inc${str}" class="incremental_btn cursor-pointer w-5 h-5 bg-gray-700 rounded-md flex justify-center items-center mx-2" > + </button><span id="qt${str}">${qty}</span><button id="dec${str}" class="decremental_btn cursor-pointer w-5 h-5 bg-gray-700 rounded-md flex justify-center items-center mx-2" >-</button > </div> </td> <td class="px-6 py-4">${cat}</td> <td class="px-6 py-4">${price}</td>  </tr>`)
+      })
+      document.querySelector('#price').innerHTML=`₹ ${cnt}`;
+      $('#amount').val(cnt)
+    }
+</script>
+{% endblock %}

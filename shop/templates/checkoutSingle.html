@@ -1,0 +1,84 @@
+{% extends 'checkoutTemplate.html' %}
+
+{% block body %}
+<div class="p-6 space-y-6">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-96">
+          <table
+            id="cartTable"
+            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+          >
+            <thead
+              class="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            ></thead>
+            <tbody>
+              <tr
+                class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
+                <th
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                >
+                  {{item.Product_Name}}
+                </th>
+                <td class="px-6 py-4">
+                  <div class="flex justify-start items-center">
+                    <button
+                      id="inc"
+                      class="incremental_btn cursor-pointer w-5 h-5 bg-gray-700 rounded-md flex justify-center items-center mx-2"
+                    >
+                      +</button
+                    ><span id="qt">1</span
+                    ><button
+                      id="dec"
+                      class="decremental_btn cursor-pointer w-5 h-5 bg-gray-700 rounded-md flex justify-center items-center mx-2"
+                    >
+                      -
+                    </button>
+                  </div>
+                </td>
+                <td class="px-6 py-4">{{item.Catagory}}</td>
+                <td class="px-6 py-4">₹{{item.Price}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div> 
+      <div class="p-4 text-sm text-gray-700 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-300" role="alert">
+        Your cart total is <span class="font-medium" id="price">₹ 34234</span>. Fill in all details to continue..
+      </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  var price = Math.floor('{{item.Price}}')
+    $(document).ready(()=>{
+      let qty = 1;
+      document.querySelector('#price').innerHTML = `₹${qty*price}`
+      $('#amount').val(qty*price)
+        $('#inc').click(()=>{
+            qty+=1;
+            document.querySelector('#qt').innerHTML=qty;
+            document.querySelector('#price').innerHTML = `₹${qty*price}`
+            $('#amount').val(qty*price)
+        })
+        
+        $('#dec').click(()=>{
+            if(qty>1)
+                qty-=1;
+            document.querySelector('#qt').innerHTML=qty;
+            document.querySelector('#price').innerHTML = `₹${qty*price}`
+            $('#amount').val(qty*price)
+        })
+
+        let item = {
+          name: '{{item.Product_Name}}',
+          qty: qty,
+          cat: '{{item.Catagory}}',
+          price: '{{item.Price}}',
+          str: '{{item.Prod_Id}}'
+        }
+
+        $('#jsonobject').val("["+JSON.stringify(item)+"]")
+    })
+</script>
+{% endblock %}
