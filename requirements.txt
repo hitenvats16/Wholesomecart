@@ -10,3 +10,5 @@ whitenoise
 wincertstore
 psycopg2-binary
 shell
+gunicorn
+django-heroku
